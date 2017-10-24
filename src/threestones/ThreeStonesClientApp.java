@@ -9,7 +9,7 @@ package threestones;
  *
  * @author Philippe
  */
-public class ThreeStonesClient {
+public class ThreeStonesClientApp {
 
     /**
      * @param args the command line arguments
