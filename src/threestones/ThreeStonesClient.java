@@ -17,11 +17,20 @@ public class ThreeStonesClient {
     private String address;
     private Socket socket;
     private Scanner reader;
-    private boolean playerControl = true;
-    private boolean gameInProgress = false;
+    private boolean playAgain = true;
     private InputStream in;
     private OutputStream out;
     private String answer;
+    private Cell[][] board;
+    private int playerScore = 0;
+    private int compScore = 0;
+    private int totalTurns = 0;
+    private int x;
+    private int y;
+    
+    public enum Cell {
+        WALL, EMPTY, WHITE, BLACK
+    };
     
     /**
      * Default constructor that takes a string to represent the server's 
@@ -54,15 +63,18 @@ public class ThreeStonesClient {
      */
     public void playSession()throws IOException{
         reader = new Scanner(System.in);
-        ThreeStonesPacket packet;
-        System.out.println("Would you like to play a game (y/n)");
-        answer = reader.next();
-        if(answer.equals("y")){
-            playGame();
-        }else{
-            packet = new ThreeStonesPacket(2, 0, 0, 0, 0);
-            endSession(packet);
-        }          
+        while(playAgain){
+            ThreeStonesPacket packet;
+            System.out.println("Would you like to play a game (y/n)");
+            answer = reader.next();
+            if(answer.equals("y")){
+                playGame();
+            }else{
+                packet = new ThreeStonesPacket(2, 0, 0, 0, 0);
+                playAgain = false;
+                endSession(packet);
+            }    
+        }
     }
     
     /**
@@ -78,34 +90,119 @@ public class ThreeStonesClient {
                 + "in the client.");
             System.exit(1);
         }
-        System.exit(1);
     }
     
     /**
      * Method that will be the main gameplay loop for the client.
      */
     private void playGame(){
-        //GAMELOGIC
+        totalTurns = 0;
+        playerScore = 0;
+        compScore = 0;
+        instantiateBoard();
+        ThreeStonesPacket packet;
+        byte[] values = new byte[5];
+        while(totalTurns != 36){
+            printBoardAndResult();
+            System.out.println("Select your Column");
+            x = Integer.parseInt(reader.next());
+            System.out.println("Select your Row");
+            y = Integer.parseInt(reader.next());
+            packet = new ThreeStonesPacket(4, x, y, playerScore, compScore);
+            board[x][y] = Cell.WHITE;
+            packet.sendPacket(out);
+            values = packet.receivePacket(in);
+            board[(int)values[1]][(int)values[2]] = Cell.BLACK;
+            playerScore = (int) values[3];
+            compScore = (int) values[4];
+            totalTurns += 2;
+        }
     }
     
     /**
-     * The client will send the server their move.
      * 
-     * @param packet
-     * @throws IOException 
      */
-    public void makeMove(ThreeStonesPacket packet)throws IOException{
-        packet.sendPacket(out);
+    private void instantiateBoard(){
+        board = new Cell[11][11];
+        for (int i = 0; i < board.length; i++) {
+            for (int j = 0; j < board[i].length; j++) {
+                if (i == 0 || i == 1 || i == 9 || i == 10) {
+                    board[i][j] = Cell.WALL;
+                }
+                if (i == 2) {
+                    if (j == 4 || j == 5 || j == 6) {
+                        board[i][j] = Cell.EMPTY;
+                    } else {
+                        board[i][j] = Cell.WALL;
+                    }
+                }
+                if (i == 3) {
+                    if (j == 3 || j == 4 || j == 5 || j == 6 || j == 7) {
+                        board[i][j] = Cell.EMPTY;
+                    } else {
+                        board[i][j] = Cell.WALL;
+                    }
+                }
+
+                if (i == 4) {
+                    if (j == 2 || j == 3 || j == 4 || j == 5 || j == 6 || j == 7 || j == 8) {
+                        board[i][j] = Cell.EMPTY;
+                    } else {
+                        board[i][j] = Cell.WALL;
+                    }
+                }
+
+                if (i == 5) {
+                    if (j == 2 || j == 3 || j == 4 || j == 6 || j == 7 || j == 8) {
+                        board[i][j] = Cell.EMPTY;
+                    } else {
+                        board[i][j] = Cell.WALL;
+                    }
+                }
+
+                if (i == 6) {
+                    if (j == 2 || j == 3 || j == 4 || j == 5 || j == 6 || j == 7 || j == 8) {
+                        board[i][j] = Cell.EMPTY;
+                    } else {
+                        board[i][j] = Cell.WALL;
+                    }
+                }
+
+                if (i == 7) {
+                    if (j == 3 || j == 4 || j == 5 || j == 6 || j == 7) {
+                        board[i][j] = Cell.EMPTY;
+                    } else {
+                        board[i][j] = Cell.WALL;
+                    }
+                }
+
+                if (i == 8) {
+                    if (j == 4 || j == 5 || j == 6) {
+                        board[i][j] = Cell.EMPTY;
+                    } else {
+                        board[i][j] = Cell.WALL;
+                    }
+                }
+            }
+        }
     }
     
     /**
-     * The client will receive the move from the server.
-     * 
-     * @param packet
-     * @throws IOException 
+     * Print the board and score, only for testing purposes
      */
-    public void receiveMove(ThreeStonesPacket packet) throws IOException{
-        packet.receivePacket(in);
+    public void printBoardAndResult() {
+        String result = "";
+        for (ThreeStonesClient.Cell[] row : board) {
+            for (ThreeStonesClient.Cell c : row) {
+                result += " " + c;
+            }
+            result += "\n";
+        }
+        System.out.println(result);
+        System.out.println("Total Turns: " + totalTurns);
+        System.out.println("Player Score: " + playerScore);
+        System.out.println("Comp Score: " + compScore);
     }
+
     
 }
