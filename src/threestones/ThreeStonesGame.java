@@ -101,7 +101,7 @@ public class ThreeStonesGame {
      * 
      * @return 
      */
-    public int getBlackSCore(){
+    public int getBlackScore(){
         return compScore;
     }
     
@@ -109,12 +109,12 @@ public class ThreeStonesGame {
      * This method is passed the x and y locations that the client would like
      * to place their white piece
      * 
-     * @param x
-     * @param y 
+     * @param row
+     * @param column
      */
-    public void userMove(int x, int y){
-        board[x][y] = Cell.WHITE;
-        checkScore(x, y);
+    public void userMove(int row, int column){
+        board[row][column] = Cell.WHITE;
+        checkScore(row, column);
     }
     
     /**
@@ -132,6 +132,7 @@ public class ThreeStonesGame {
         }else{
             AIMove();
         }
+        totalTurns++;
         return decision;
     }
 
@@ -141,7 +142,7 @@ public class ThreeStonesGame {
     public void aiRandomMove() {
         int r1;
         int r2;
-        boolean invalid = false;
+        boolean invalid = true;
         while (invalid) {
             r1 = (int) (Math.random() * 11);
             r2 = (int) (Math.random() * 11);

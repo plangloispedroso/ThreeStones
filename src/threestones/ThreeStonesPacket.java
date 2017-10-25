@@ -31,17 +31,17 @@ public class ThreeStonesPacket {
      * in to a byte array in order to send through the Input and Output streams.
      * 
      * @param opCode
-     * @param positionX
-     * @param positionY
+     * @param row
+     * @param column
      * @param playerPoints
      * @param computerPoints 
      */
-    public ThreeStonesPacket(int opCode, int positionX, int positionY, 
+    public ThreeStonesPacket(int opCode, int row, int column, 
         int playerPoints, int computerPoints){
         try{
             packet[0] = (byte) opCode;
-            packet[1] = (byte) positionX;
-            packet[2] = (byte) positionY;
+            packet[1] = (byte) row;
+            packet[2] = (byte) column;
             packet[3] = (byte) playerPoints;
             packet[4] = (byte) computerPoints;
         }catch(Exception ex){

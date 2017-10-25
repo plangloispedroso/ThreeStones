@@ -25,8 +25,8 @@ public class ThreeStonesClient {
     private int playerScore = 0;
     private int compScore = 0;
     private int totalTurns = 0;
-    private int x;
-    private int y;
+    private int row;
+    private int column;
     
     public enum Cell {
         WALL, EMPTY, WHITE, BLACK
@@ -99,22 +99,29 @@ public class ThreeStonesClient {
         totalTurns = 0;
         playerScore = 0;
         compScore = 0;
-        instantiateBoard();
-        ThreeStonesPacket packet;
         byte[] values = new byte[5];
-        while(totalTurns != 36){
+        instantiateBoard();
+        ThreeStonesPacket packet = new ThreeStonesPacket(1, 0, 0, 0, 0);
+        packet.sendPacket(out);
+        values = packet.receivePacket(in);
+        System.out.println(Integer.toString((int)values[0]));
+        while(totalTurns < 36){
             printBoardAndResult();
-            System.out.println("Select your Column");
-            x = Integer.parseInt(reader.next());
             System.out.println("Select your Row");
-            y = Integer.parseInt(reader.next());
-            packet = new ThreeStonesPacket(4, x, y, playerScore, compScore);
-            board[x][y] = Cell.WHITE;
+            row = Integer.parseInt(reader.next());
+            System.out.println("Select your Column");
+            column = Integer.parseInt(reader.next());
+            packet = new ThreeStonesPacket(4, row-1, column-1, playerScore, compScore);
+            board[row-1][column-1] = Cell.WHITE;
+            System.out.println("white placed at: " +Integer.toString(row) +", " +Integer.toString(column));
             packet.sendPacket(out);
             values = packet.receivePacket(in);
-            board[(int)values[1]][(int)values[2]] = Cell.BLACK;
+            row = (int) values[1] + 1;
+            column = (int) values[2] + 1;
             playerScore = (int) values[3];
             compScore = (int) values[4];
+            board[row-1][column-1] = Cell.BLACK;
+            System.out.println("black placed at: " +Integer.toString(row) +", " +Integer.toString(column));
             totalTurns += 2;
         }
     }
