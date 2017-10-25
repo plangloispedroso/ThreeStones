@@ -12,8 +12,12 @@ import java.io.OutputStream;
 /**
  * A custom packet that is used to communicate information between the client 
  * and server of a ThreeStonesGame.
+ * 
  * opCode = 1 -> Client wants to play a game.
  * opCode = 2 -> Client does not want to play a game.
+ * opCode = 3 -> Server is initializing the game.
+ * opCode = 4 -> A move is being made.
+ * opCode = 5 -> Server asks user to play again.
  * 
  * @author Philippe
  */
