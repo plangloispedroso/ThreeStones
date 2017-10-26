@@ -27,6 +27,10 @@ public class ThreeStonesClient {
     private int totalTurns = 0;
     private int row;
     private int column;
+    private int compRow;
+    private int compColumn;
+    private int playerWins = 0;
+    private int computerWins = 0;
     
     public enum Cell {
         WALL, EMPTY, WHITE, BLACK
@@ -65,6 +69,8 @@ public class ThreeStonesClient {
         reader = new Scanner(System.in);
         while(playAgain){
             ThreeStonesPacket packet;
+            System.out.println("You have won: " +playerWins +" time(s).");
+            System.out.println("You have lost: " +computerWins +" time(s).");
             System.out.println("Would you like to play a game (y/n)");
             answer = reader.next();
             if(answer.equals("y")){
@@ -99,6 +105,8 @@ public class ThreeStonesClient {
         totalTurns = 0;
         playerScore = 0;
         compScore = 0;
+        boolean validMove = false;
+        boolean firstTurn = true;
         byte[] values = new byte[5];
         instantiateBoard();
         ThreeStonesPacket packet = new ThreeStonesPacket(1, 0, 0, 0, 0);
@@ -107,21 +115,44 @@ public class ThreeStonesClient {
         System.out.println(Integer.toString((int)values[0]));
         while(totalTurns < 30){
             printBoardAndResult();
-            System.out.println("Select your Row");
-            row = Integer.parseInt(reader.next());
-            System.out.println("Select your Column");
-            column = Integer.parseInt(reader.next());
+            if(firstTurn){
+                while(!validMove){
+                    System.out.println("Select your Row");
+                    row = Integer.parseInt(reader.next());
+                    System.out.println("Select your Column");
+                    column = Integer.parseInt(reader.next());
+                    if(board[row][column] == Cell.EMPTY){
+                        validMove = true;
+                    }else{
+                        System.out.println("That was an invalid move.");
+                    }
+                }
+                firstTurn = false;
+            }else{
+                while(!validMove){ // loop for a valid user move
+                    System.out.println("Select your Row");
+                    row = Integer.parseInt(reader.next());
+                    System.out.println("Select your Column");
+                    column = Integer.parseInt(reader.next());
+                    if((row == compRow || column == compColumn) && (board[row][column] == Cell.EMPTY)){
+                        validMove = true;
+                    }else{
+                        System.out.println("That was an invalid move.");
+                    }
+                }
+            }
+            validMove = false;
             packet = new ThreeStonesPacket(4, row-1, column-1, playerScore, compScore);
             board[row-1][column-1] = Cell.WHITE;
             System.out.println("white placed at: " +Integer.toString(row) +", " +Integer.toString(column));
             packet.sendPacket(out);
             values = packet.receivePacket(in);
-            row = (int) values[1] + 1;
-            column = (int) values[2] + 1;
+            compRow = (int) values[1] + 1;
+            compColumn = (int) values[2] + 1;
             playerScore = (int) values[3];
             compScore = (int) values[4];
-            board[row-1][column-1] = Cell.BLACK;
-            System.out.println("black placed at: " +Integer.toString(row) +", " +Integer.toString(column));
+            board[compRow-1][compColumn-1] = Cell.BLACK;
+            System.out.println("black placed at: " +Integer.toString(compRow) +", " +Integer.toString(compColumn));
             totalTurns += 2;
         }
     }
