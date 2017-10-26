@@ -5,7 +5,8 @@ import java.util.Scanner;
 /**
  * Class that is designed to start a client in order to play a game of ThreeStones
  * 
- * @author Philippe Langlois-Pedroso
+ * @authors Philippe Langlois-Pedroso, Kevin Bui and Amin Manai.
+ * @version 1.0
  */
 public class ThreeStonesClientApp {
     

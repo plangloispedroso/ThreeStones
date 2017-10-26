@@ -9,12 +9,13 @@ import java.util.Scanner;
 /**
  * Class that creates a Client to enter a session of ThreeStones with a server.
  * 
- * @author Philippe
+ * @authors Philippe Langlois-Pedroso, Kevin Bui and Amin Manai.
+ * @version 1.0
  */
 public class ThreeStonesClient {
     
     public static final int PORTNUMBER = 50000;
-    private String address;
+    private final String address;
     private Socket socket;
     private Scanner reader;
     private boolean playAgain = true;
@@ -62,11 +63,14 @@ public class ThreeStonesClient {
     }
     
     /**
+     * Method that will attempt to initiate a session with the server, depending
+     * on if the client would like to start a session.
      * 
      * @throws IOException 
      */
     public void playSession()throws IOException{
         reader = new Scanner(System.in);
+        byte[] values = new byte[5];
         while(playAgain){
             ThreeStonesPacket packet;
             System.out.println("You have won: " +playerWins +" time(s).");
@@ -74,8 +78,15 @@ public class ThreeStonesClient {
             System.out.println("Would you like to play a game (y/n)");
             answer = reader.next();
             if(answer.equals("y")){
-                playGame();
+                // Tell the server that the client would like to play a game
+                packet = new ThreeStonesPacket(1, 0, 0, 0, 0);
+                packet.sendPacket(out);
+                values = packet.receivePacket(in);
+                if((int) values[0] == 3){ // Server instantiated the game
+                    playGame();
+                }
             }else{
+                // tell the server that the client would not like to play a game
                 packet = new ThreeStonesPacket(2, 0, 0, 0, 0);
                 playAgain = false;
                 endSession(packet);
@@ -99,66 +110,59 @@ public class ThreeStonesClient {
     }
     
     /**
-     * Method that will be the main gameplay loop for the client.
+     * Method that when called will play a single game of ThreeStones with the 
+     * server and will tally the victor.
      */
     private void playGame(){
         totalTurns = 0;
         playerScore = 0;
         compScore = 0;
-        boolean validMove = false;
-        boolean firstTurn = true;
         byte[] values = new byte[5];
         instantiateBoard();
-        ThreeStonesPacket packet = new ThreeStonesPacket(1, 0, 0, 0, 0);
-        packet.sendPacket(out);
-        values = packet.receivePacket(in);
-        System.out.println(Integer.toString((int)values[0]));
+        ThreeStonesPacket packet;
+        // Gameplay loop
         while(totalTurns < 30){
-            printBoardAndResult();
-            if(firstTurn){
-                while(!validMove){
-                    System.out.println("Select your Row");
-                    row = Integer.parseInt(reader.next());
-                    System.out.println("Select your Column");
-                    column = Integer.parseInt(reader.next());
-                    if(board[row][column] == Cell.EMPTY){
-                        validMove = true;
-                    }else{
-                        System.out.println("That was an invalid move.");
-                    }
-                }
-                firstTurn = false;
-            }else{
-                while(!validMove){ // loop for a valid user move
-                    System.out.println("Select your Row");
-                    row = Integer.parseInt(reader.next());
-                    System.out.println("Select your Column");
-                    column = Integer.parseInt(reader.next());
-                    if((row == compRow || column == compColumn) && (board[row][column] == Cell.EMPTY)){
-                        validMove = true;
-                    }else{
-                        System.out.println("That was an invalid move.");
-                    }
-                }
-            }
-            validMove = false;
+            printBoardAndResult(); // Display board to the user
+            // Get user input
+            System.out.println("Select your Row");
+            row = Integer.parseInt(reader.next());
+            System.out.println("Select your Column");
+            column = Integer.parseInt(reader.next());  
+            // Create the packet to be sent
             packet = new ThreeStonesPacket(4, row-1, column-1, playerScore, compScore);
+            packet.sendPacket(out); // Send the packet to the server
+            values = packet.receivePacket(in); // Receive packet from the server
+            // loop for receiving an invalid move opcode
+            while(values[0] == (int)6){ // 6 is the opCode for invalid move
+                System.out.println("That was an invalid move, try again.");
+                System.out.println("Select your Row");
+                row = Integer.parseInt(reader.next());
+                System.out.println("Select your Column");
+                column = Integer.parseInt(reader.next());
+                packet = new ThreeStonesPacket(4, row-1, column-1, playerScore, compScore);
+                packet.sendPacket(out);
+                values = packet.receivePacket(in);
+            }
+            // the move was valid, update the board
             board[row-1][column-1] = Cell.WHITE;
+            board[(int)values[1]][(int)values[2]] = Cell.BLACK;
             System.out.println("white placed at: " +Integer.toString(row) +", " +Integer.toString(column));
-            packet.sendPacket(out);
-            values = packet.receivePacket(in);
-            compRow = (int) values[1] + 1;
-            compColumn = (int) values[2] + 1;
+            System.out.println("black placed at: " +Integer.toString((int)values[1] +1) 
+                +", " +Integer.toString((int)values[2] +1));
             playerScore = (int) values[3];
             compScore = (int) values[4];
-            board[compRow-1][compColumn-1] = Cell.BLACK;
-            System.out.println("black placed at: " +Integer.toString(compRow) +", " +Integer.toString(compColumn));
             totalTurns += 2;
         }
+        // Tall who won the game
+        if(playerScore >= compScore){
+            playerWins++;
+        }else{
+            computerWins++;
+        }     
     }
     
     /**
-     * 
+     * MEthod that when called will instantiate a new board for the user.
      */
     private void instantiateBoard(){
         board = new Cell[11][11];
@@ -181,7 +185,6 @@ public class ThreeStonesClient {
                         board[i][j] = Cell.BLOCK;
                     }
                 }
-
                 if (i == 4) {
                     if (j == 2 || j == 3 || j == 4 || j == 5 || j == 6 || j == 7 || j == 8) {
                         board[i][j] = Cell.EMPTY;
@@ -189,7 +192,6 @@ public class ThreeStonesClient {
                         board[i][j] = Cell.BLOCK;
                     }
                 }
-
                 if (i == 5) {
                     if (j == 2 || j == 3 || j == 4 || j == 6 || j == 7 || j == 8) {
                         board[i][j] = Cell.EMPTY;
@@ -197,7 +199,6 @@ public class ThreeStonesClient {
                         board[i][j] = Cell.BLOCK;
                     }
                 }
-
                 if (i == 6) {
                     if (j == 2 || j == 3 || j == 4 || j == 5 || j == 6 || j == 7 || j == 8) {
                         board[i][j] = Cell.EMPTY;
@@ -205,7 +206,6 @@ public class ThreeStonesClient {
                         board[i][j] = Cell.BLOCK;
                     }
                 }
-
                 if (i == 7) {
                     if (j == 3 || j == 4 || j == 5 || j == 6 || j == 7) {
                         board[i][j] = Cell.EMPTY;
@@ -213,7 +213,6 @@ public class ThreeStonesClient {
                         board[i][j] = Cell.BLOCK;
                     }
                 }
-
                 if (i == 8) {
                     if (j == 4 || j == 5 || j == 6) {
                         board[i][j] = Cell.EMPTY;
@@ -226,11 +225,11 @@ public class ThreeStonesClient {
     }
     
     /**
-     * Print the board and score, only for testing purposes
+     * Print the board and score to show the user the current state of a game.
      */
     public void printBoardAndResult() {
-        System.out.println("----------------------------------------------------"
-            + "-----------------------------------");
+        System.out.println("---------------------------------------------------"
+            + "------------------------------------");
         String result = "";
         for (ThreeStonesClient.Cell[] row : board) {
             for (ThreeStonesClient.Cell c : row) {
@@ -239,11 +238,11 @@ public class ThreeStonesClient {
             result += "\n";
         }
         System.out.println(result);
-        System.out.println("----------------------------------------------------"
-            + "-----------------------------------");
-        System.out.println("Total Turns: " + totalTurns);
+        System.out.println("---------------------------------------------------"
+            + "------------------------------------");
+        System.out.println("Stones Left: " +(30-(totalTurns/2)));
         System.out.println("Player Score: " + playerScore);
-        System.out.println("Comp Score: " + compScore);
+        System.out.println("Comp Score: " + compScore);                     
     }
 
     

@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package threestones;
 
 import java.io.IOException;
@@ -18,8 +13,10 @@ import java.io.OutputStream;
  * opCode = 3 -> Server is initializing the game.
  * opCode = 4 -> A move is being made.
  * opCode = 5 -> Server asks user to play again.
+ * opCode = 6 -> Client tried to make an invalid move
  * 
- * @author Philippe
+ * @authors Philippe Langlois-Pedroso, Kevin Bui and Amin Manai.
+ * @version 1.0
  */
 public class ThreeStonesPacket {
     

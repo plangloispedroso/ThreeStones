@@ -1,10 +1,11 @@
 package threestones;
 
-import javax.swing.JOptionPane;
-
 /**
- *
- * @author Kevin Bui
+ * Class designed to simulate the board of a game of ThreeStones along with
+ * the game's rule-sets.
+ * 
+ * @authors Philippe Langlois-Pedroso, Kevin Bui and Amin Manai.
+ * @version 1.0
  */
 public class ThreeStonesGame {
     
@@ -43,7 +44,6 @@ public class ThreeStonesGame {
                         board[i][j] = Cell.WALL;
                     }
                 }
-
                 if (i == 4) {
                     if (j == 2 || j == 3 || j == 4 || j == 5 || j == 6 || j == 7 || j == 8) {
                         board[i][j] = Cell.EMPTY;
@@ -51,7 +51,6 @@ public class ThreeStonesGame {
                         board[i][j] = Cell.WALL;
                     }
                 }
-
                 if (i == 5) {
                     if (j == 2 || j == 3 || j == 4 || j == 6 || j == 7 || j == 8) {
                         board[i][j] = Cell.EMPTY;
@@ -59,7 +58,6 @@ public class ThreeStonesGame {
                         board[i][j] = Cell.WALL;
                     }
                 }
-
                 if (i == 6) {
                     if (j == 2 || j == 3 || j == 4 || j == 5 || j == 6 || j == 7 || j == 8) {
                         board[i][j] = Cell.EMPTY;
@@ -67,7 +65,6 @@ public class ThreeStonesGame {
                         board[i][j] = Cell.WALL;
                     }
                 }
-
                 if (i == 7) {
                     if (j == 3 || j == 4 || j == 5 || j == 6 || j == 7) {
                         board[i][j] = Cell.EMPTY;
@@ -75,7 +72,6 @@ public class ThreeStonesGame {
                         board[i][j] = Cell.WALL;
                     }
                 }
-
                 if (i == 8) {
                     if (j == 4 || j == 5 || j == 6) {
                         board[i][j] = Cell.EMPTY;
@@ -130,7 +126,7 @@ public class ThreeStonesGame {
             firstCompMove = false;
             aiRandomMove(row, column);
         }else{
-            AIMove2(row, column);
+            aiMove(row, column);
         }
         totalTurns++;
         return decision;
@@ -138,6 +134,9 @@ public class ThreeStonesGame {
 
     /**
      * Selects a random place on the board to place a marble
+     * 
+     * @param row
+     * @param column
      */
     public void aiRandomMove(int row, int column) {
         int r1;
@@ -166,6 +165,94 @@ public class ThreeStonesGame {
                 }
             }
         }// end of loop
+    }
+    
+    /**
+     * Method that will perform the computer's move. The computer will prioritize
+     * scoring a point over bloacking a point form the client.
+     * 
+     * @param row
+     * @param column
+     * @return 
+     */
+    public int[] aiMove(int row, int column){
+        for(int i = 0; i < 11; i++){
+            // Check if comp can score horizontally
+            if(board[row][i] == Cell.BLACK && board[row][i+1] == Cell.BLACK 
+                && board[row][i+2] == Cell.EMPTY){
+                decision[0] = row;
+                decision[1] = i+2;
+                break;
+            }else if(board[row][i+1] == Cell.BLACK && board[row][i+2] == Cell.BLACK
+                && board[row][i] == Cell.EMPTY){
+                decision[0] = row;
+                decision[1] = i;
+                break;
+            }else if(board[row][i] == Cell.BLACK && board[row][i+2] == Cell.BLACK
+                && board[row][i+1] == Cell.EMPTY){
+                decision[0] = row;
+                decision[1] = i+1;
+                break;
+            }
+            //check if comp can score vertically
+            else if(board[i][column] == Cell.BLACK && board[i+1][column] == Cell.BLACK
+                && board[i+2][column] == Cell.EMPTY){
+                decision[0] = i+2;
+                decision[1] = column;
+                break;
+            }else if(board[i+1][column] == Cell.BLACK && board[i+2][column] == Cell.BLACK
+                && board[i][column] == Cell.EMPTY){
+                decision[0] = i;
+                decision[1] = column;
+                break;
+            }else if(board[i][column] == Cell.BLACK && board[i+2][column] == Cell.BLACK
+                && board[i+1][column] == Cell.EMPTY){
+                decision[0] = i+1;
+                decision[1] = column;
+                break;
+            }
+            // check if comp can block horizontally
+            if(board[row][i] == Cell.WHITE && board[row][i+1] == Cell.WHITE 
+                && board[row][i+2] == Cell.EMPTY){
+                decision[0] = row;
+                decision[1] = i+2;
+                break;
+            }else if(board[row][i+1] == Cell.WHITE && board[row][i+2] == Cell.WHITE
+                && board[row][i] == Cell.EMPTY){
+                decision[0] = row;
+                decision[1] = i;
+                break;
+            }else if(board[row][i] == Cell.WHITE && board[row][i+2] == Cell.WHITE
+                && board[row][i+1] == Cell.EMPTY){
+                decision[0] = row;
+                decision[1] = i+1;
+                break;
+                
+            }//check if comp can block vertically
+            else if(board[i][column] == Cell.WHITE && board[i+1][column] == Cell.WHITE
+                && board[i+2][column] == Cell.EMPTY){
+                decision[0] = i+2;
+                decision[1] = column;
+                break;
+            }else if(board[i+1][column] == Cell.WHITE && board[i+2][column] == Cell.WHITE
+                && board[i][column] == Cell.EMPTY){
+                decision[0] = i;
+                decision[1] = column;
+                break;
+            }else if(board[i][column] == Cell.WHITE && board[i+2][column] == Cell.WHITE
+                && board[i+1][column] == Cell.EMPTY){
+                decision[0] = i+1;
+                decision[1] = column;
+                break;
+            }else{
+                aiRandomMove(row, column);
+                return null;
+            }
+            //check to score diagonally
+        }// i loop
+        
+        checkScore(decision[0], decision[1]);
+        return decision;
     }
 
     /**
@@ -276,201 +363,6 @@ public class ThreeStonesGame {
     }
 
     /**
-     * Checks the possibilities for the AI whether it can score or block a point
-     */
-    public void AIMove(int row, int column) {
-        boolean aiMoved = false;
-        outerloop:
-        for (int i = 0; i < board.length; i++) {
-            for (int j = 0; j < board[i].length; j++) {
-                // Check for the comp point
-                if (board[i][j] == Cell.BLACK) {
-                    // Score a point
-                    // Check if top has another black cell and bottom cell is empty
-                    if (board[i][j - 1] == Cell.BLACK && board[i][j + 1] == Cell.EMPTY) {
-                        board[i][j + 1] = Cell.BLACK;
-                        decision[0] = i;
-                        decision[1] = j+1;
-                        //aiMoved = true;
-                        checkScore(i, j + 1);
-                        //System.out.println("AI Scored!");
-                        break outerloop;
-                    }
-
-                    // Check if bottom has another black cell and bottom cell is empty
-                    if (board[i][j + 1] == Cell.BLACK && board[i][j - 1] == Cell.EMPTY) {
-                        board[i][j - 1] = Cell.BLACK;
-                        decision[0] = i;
-                        decision[1] = j-1;
-                        //aiMoved = true;
-                        checkScore(i, j - 1);
-                        //System.out.println("AI Scored!");
-                        break outerloop;
-                    }
-
-                    // Check if left has another black cell and right cell is empty
-                    if (board[i - 1][j] == Cell.BLACK && board[i + 1][j] == Cell.EMPTY) {
-                        board[i + 1][j] = Cell.BLACK;
-                        decision[0] = i+1;
-                        decision[1] = j;
-                        //aiMoved = true;
-                        checkScore(i + 1, j);
-                        //System.out.println("AI Scored!");
-                        break outerloop;
-                    }
-
-                    // Check if right has another black cell and left cell is empty
-                    if (board[i + 1][j] == Cell.BLACK && board[i - 1][j] == Cell.EMPTY) {
-                        board[i - 1][j] = Cell.BLACK;
-                        decision[0] = i-1;
-                        decision[1] = j;
-                        //aiMoved = true;
-                        checkScore(i - 1, j);
-                        //System.out.println("AI Scored!");
-                        break outerloop;
-                    }
-
-                    // Check if top left has another black cell and bottom right cell is empty
-                    if (board[i - 1][j - 1] == Cell.BLACK && board[i + 1][j + 1] == Cell.EMPTY) {
-                        board[i + 1][j + 1] = Cell.BLACK;
-                        decision[0] = i+1;
-                        decision[1] = j+1;
-                        //aiMoved = true;
-                        checkScore(i + 1, j + 1);
-                        //System.out.println("AI Scored!");
-                        break outerloop;
-                    }
-
-                    // Check if top right has another black cell and bottom left cell is empty
-                    if (board[i + 1][j - 1] == Cell.BLACK && board[i - 1][j + 1] == Cell.EMPTY) {
-                        board[i - 1][j + 1] = Cell.BLACK;
-                        decision[0] = i-1;
-                        decision[1] = j+1;
-                        //aiMoved = true;
-                        checkScore(i - 1, j + 1);
-                        //System.out.println("AI Scored!");
-                        break outerloop;
-                    }
-
-                    // Check if bottom right has another black cell and top left cell is empty
-                    if (board[i + 1][j + 1] == Cell.BLACK && board[i - 1][j - 1] == Cell.EMPTY) {
-                        board[i - 1][j - 1] = Cell.BLACK;
-                        decision[0] = i-1;
-                        decision[1] = j-1;
-                        //aiMoved = true;
-                        checkScore(i - 1, j - 1);
-                        //System.out.println("AI Scored!");
-                        break outerloop;
-                    }
-
-                    // Check if bottom left has another black cell and top right cell is empty
-                    if (board[i - 1][j + 1] == Cell.BLACK && board[i + 1][j - 1] == Cell.EMPTY) {
-                        board[i + 1][j - 1] = Cell.BLACK;
-                        decision[0] = i+1;
-                        decision[1] = j-1;
-                        //aiMoved = true;
-                        checkScore(i + 1, j - 1);
-                        //System.out.println("AI Scored!");
-                        break outerloop;
-                    }
-                }
-
-                if (board[i][j] == Cell.WHITE) {
-                    // Block player
-                    // Check if top has another black cell and bottom cell is empty
-                    if (board[i][j - 1] == Cell.WHITE && board[i][j + 1] == Cell.EMPTY) {
-                        board[i][j + 1] = Cell.BLACK;
-                        decision[0] = i;
-                        decision[1] = j+1;
-                        //aiMoved = true;
-                        checkScore(i, j + 1);
-                        //System.out.println("AI Blocked!");
-                        break outerloop;
-                    }
-
-                    // Check if bottom has another black cell and bottom cell is empty
-                    if (board[i][j + 1] == Cell.WHITE && board[i][j - 1] == Cell.EMPTY) {
-                        board[i][j - 1] = Cell.BLACK;
-                        decision[0] = i;
-                        decision[1] = j-1;
-                        //aiMoved = true;
-                        checkScore(i, j - 1);
-                        //System.out.println("AI Blocked!");
-                        break outerloop;
-                    }
-
-                    // Check if left has another black cell and right cell is empty
-                    if (board[i - 1][j] == Cell.WHITE && board[i + 1][j] == Cell.EMPTY) {
-                        board[i + 1][j] = Cell.BLACK;
-                        decision[0] = i+1;
-                        decision[1] = j;
-                        //aiMoved = true;
-                        checkScore(i + 1, j);
-                        //System.out.println("AI Blocked!");
-                        break outerloop;
-                    }
-
-                    // Check if right has another black cell and left cell is empty
-                    if (board[i + 1][j] == Cell.WHITE && board[i - 1][j] == Cell.EMPTY) {
-                        board[i - 1][j] = Cell.BLACK;
-                        decision[0] = i-1;
-                        decision[1] = j;
-                        //aiMoved = true;
-                        checkScore(i - 1, j);
-                        //System.out.println("AI Blocked!");
-                        break outerloop;
-                    }
-
-                    // Check if top left has another black cell and bottom right cell is empty
-                    if (board[i - 1][j - 1] == Cell.WHITE && board[i + 1][j + 1] == Cell.EMPTY) {
-                        board[i + 1][j + 1] = Cell.BLACK;
-                        decision[0] = i+1;
-                        decision[1] = j+1;
-                        //aiMoved = true;
-                        checkScore(i + 1, j + 1);
-                        //System.out.println("AI Blocked!");
-                        break outerloop;
-                    }
-
-                    // Check if top right has another black cell and bottom left cell is empty
-                    if (board[i + 1][j - 1] == Cell.WHITE && board[i - 1][j + 1] == Cell.EMPTY) {
-                        board[i - 1][j + 1] = Cell.BLACK;
-                        decision[0] = i-1;
-                        decision[1] = j+1;
-                        //aiMoved = true;
-                        checkScore(i - 1, j + 1);
-                        //System.out.println("AI Blocked!");
-                        break outerloop;
-                    }
-
-                    // Check if bottom right has another black cell and top left cell is empty
-                    if (board[i + 1][j + 1] == Cell.WHITE && board[i - 1][j - 1] == Cell.EMPTY) {
-                        board[i - 1][j - 1] = Cell.BLACK;
-                        decision[0] = i-1;
-                        decision[1] = j-1;
-                        //aiMoved = true;
-                        checkScore(i - 1, j - 1);
-                        //System.out.println("AI Blocked!");
-                        break outerloop;
-                    }
-
-                    // Check if bottom left has another black cell and top right cell is empty
-                    if (board[i - 1][j + 1] == Cell.WHITE && board[i + 1][j - 1] == Cell.EMPTY) {
-                        board[i + 1][j - 1] = Cell.BLACK;
-                        decision[0] = i+1;
-                        decision[1] = j-1;
-                        //aiMoved = true;
-                        checkScore(i + 1, j - 1);
-                        //System.out.println("AI Blocked!");
-                        break outerloop;
-                    }
-                }
-            }
-        }
-        //return aiMoved;
-    }
-    
-    /**
      * Print the board and score, only for testing purposes
      */
     public void printBoardAndResult() {
@@ -486,102 +378,20 @@ public class ThreeStonesGame {
         System.out.println("Total Turns: " + totalTurns);
         System.out.println("Player Score: " + playerScore);
         System.out.println("Comp Score: " + compScore);
-    }
-
+    }   
+     
     /**
-     * Prints the board
-     *
-     * @return result A String representation of the board
+     * MEthod that will take coordinates and check if the cell associated with
+     * those coordinates and return wether that cell is empty or not.
+     * 
+     * @param row
+     * @param column
+     * @return 
      */
-    public String toString() {
-        String result = "";
-        for (Cell[] row : board) {
-            for (Cell c : row) {
-                result += " " + c;
-            }
-            result += "\n";
+    public boolean isEmptyCell(int row, int column){
+        if(board[row][column].equals(Cell.EMPTY)){
+            return true;
         }
-        return result;
-    }
-    
-    
-    public int[] AIMove2(int row, int column){
-        for(int i = 0; i < 11; i++){
-            // Check if comp can score horizontally
-            if(board[row][i] == Cell.BLACK && board[row][i+1] == Cell.BLACK 
-                && board[row][i+2] == Cell.EMPTY){
-                decision[0] = row;
-                decision[1] = i+2;
-                break;
-            }else if(board[row][i+1] == Cell.BLACK && board[row][i+2] == Cell.BLACK
-                && board[row][i] == Cell.EMPTY){
-                decision[0] = row;
-                decision[1] = i;
-                break;
-            }else if(board[row][i] == Cell.BLACK && board[row][i+2] == Cell.BLACK
-                && board[row][i+1] == Cell.EMPTY){
-                decision[0] = row;
-                decision[1] = i+1;
-                break;
-            }
-            //check if comp can score vertically
-            else if(board[i][column] == Cell.BLACK && board[i+1][column] == Cell.BLACK
-                && board[i+2][column] == Cell.EMPTY){
-                decision[0] = i+2;
-                decision[1] = column;
-                break;
-            }else if(board[i+1][column] == Cell.BLACK && board[i+2][column] == Cell.BLACK
-                && board[i][column] == Cell.EMPTY){
-                decision[0] = i;
-                decision[1] = column;
-                break;
-            }else if(board[i][column] == Cell.BLACK && board[i+2][column] == Cell.BLACK
-                && board[i+1][column] == Cell.EMPTY){
-                decision[0] = i+1;
-                decision[1] = column;
-                break;
-            }
-            // check if comp can block horizontally
-            if(board[row][i] == Cell.WHITE && board[row][i+1] == Cell.WHITE 
-                && board[row][i+2] == Cell.EMPTY){
-                decision[0] = row;
-                decision[1] = i+2;
-                break;
-            }else if(board[row][i+1] == Cell.WHITE && board[row][i+2] == Cell.WHITE
-                && board[row][i] == Cell.EMPTY){
-                decision[0] = row;
-                decision[1] = i;
-                break;
-            }else if(board[row][i] == Cell.WHITE && board[row][i+2] == Cell.WHITE
-                && board[row][i+1] == Cell.EMPTY){
-                decision[0] = row;
-                decision[1] = i+1;
-                break;
-                
-            }//check if comp can block vertically
-            else if(board[i][column] == Cell.WHITE && board[i+1][column] == Cell.WHITE
-                && board[i+2][column] == Cell.EMPTY){
-                decision[0] = i+2;
-                decision[1] = column;
-                break;
-            }else if(board[i+1][column] == Cell.WHITE && board[i+2][column] == Cell.WHITE
-                && board[i][column] == Cell.EMPTY){
-                decision[0] = i;
-                decision[1] = column;
-                break;
-            }else if(board[i][column] == Cell.WHITE && board[i+2][column] == Cell.WHITE
-                && board[i+1][column] == Cell.EMPTY){
-                decision[0] = i+1;
-                decision[1] = column;
-                break;
-            }else{
-                aiRandomMove(row, column);
-                return null;
-            }
-            //check to score diagonally
-        }// i loop
-        
-        checkScore(decision[0], decision[1]);
-        return decision;
+        return false;
     }
 }
