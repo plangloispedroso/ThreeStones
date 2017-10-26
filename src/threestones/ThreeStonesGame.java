@@ -130,7 +130,7 @@ public class ThreeStonesGame {
             firstCompMove = false;
             aiRandomMove(row, column);
         }else{
-            AIMove(row, column);
+            AIMove2(row, column);
         }
         totalTurns++;
         return decision;
@@ -502,5 +502,86 @@ public class ThreeStonesGame {
             result += "\n";
         }
         return result;
+    }
+    
+    
+    public int[] AIMove2(int row, int column){
+        for(int i = 0; i < 11; i++){
+            // Check if comp can score horizontally
+            if(board[row][i] == Cell.BLACK && board[row][i+1] == Cell.BLACK 
+                && board[row][i+2] == Cell.EMPTY){
+                decision[0] = row;
+                decision[1] = i+2;
+                break;
+            }else if(board[row][i+1] == Cell.BLACK && board[row][i+2] == Cell.BLACK
+                && board[row][i] == Cell.EMPTY){
+                decision[0] = row;
+                decision[1] = i;
+                break;
+            }else if(board[row][i] == Cell.BLACK && board[row][i+2] == Cell.BLACK
+                && board[row][i+1] == Cell.EMPTY){
+                decision[0] = row;
+                decision[1] = i+1;
+                break;
+            }
+            //check if comp can score vertically
+            else if(board[i][column] == Cell.BLACK && board[i+1][column] == Cell.BLACK
+                && board[i+2][column] == Cell.EMPTY){
+                decision[0] = i+2;
+                decision[1] = column;
+                break;
+            }else if(board[i+1][column] == Cell.BLACK && board[i+2][column] == Cell.BLACK
+                && board[i][column] == Cell.EMPTY){
+                decision[0] = i;
+                decision[1] = column;
+                break;
+            }else if(board[i][column] == Cell.BLACK && board[i+2][column] == Cell.BLACK
+                && board[i+1][column] == Cell.EMPTY){
+                decision[0] = i+1;
+                decision[1] = column;
+                break;
+            }
+            // check if comp can block horizontally
+            if(board[row][i] == Cell.WHITE && board[row][i+1] == Cell.WHITE 
+                && board[row][i+2] == Cell.EMPTY){
+                decision[0] = row;
+                decision[1] = i+2;
+                break;
+            }else if(board[row][i+1] == Cell.WHITE && board[row][i+2] == Cell.WHITE
+                && board[row][i] == Cell.EMPTY){
+                decision[0] = row;
+                decision[1] = i;
+                break;
+            }else if(board[row][i] == Cell.WHITE && board[row][i+2] == Cell.WHITE
+                && board[row][i+1] == Cell.EMPTY){
+                decision[0] = row;
+                decision[1] = i+1;
+                break;
+                
+            }//check if comp can block vertically
+            else if(board[i][column] == Cell.WHITE && board[i+1][column] == Cell.WHITE
+                && board[i+2][column] == Cell.EMPTY){
+                decision[0] = i+2;
+                decision[1] = column;
+                break;
+            }else if(board[i+1][column] == Cell.WHITE && board[i+2][column] == Cell.WHITE
+                && board[i][column] == Cell.EMPTY){
+                decision[0] = i;
+                decision[1] = column;
+                break;
+            }else if(board[i][column] == Cell.WHITE && board[i+2][column] == Cell.WHITE
+                && board[i+1][column] == Cell.EMPTY){
+                decision[0] = i+1;
+                decision[1] = column;
+                break;
+            }else{
+                aiRandomMove(row, column);
+                return null;
+            }
+            //check to score diagonally
+        }// i loop
+        
+        checkScore(decision[0], decision[1]);
+        return decision;
     }
 }

@@ -57,16 +57,17 @@ public class ThreeStonesSession {
                 row = values[1];
                 column = values[2];
                 game.userMove(row, column); // User makes their move to the board
+                game.printBoardAndResult();
                 compXY = game.compMove(row, column); // Computer decides their move
                 playerScore = game.getWhiteScore(); // Get the client's score
                 compScore = game.getBlackScore(); // Get the computer's score 
                 // Send the computer's move to the client
                 packet = new ThreeStonesPacket(4, compXY[0], compXY[1], playerScore, compScore);
-                System.out.println("Vlack places at: " +Integer.toString(compXY[0] +1) +", " +Integer.toString(compXY[1] +1));
+                System.out.println("Black places at: " +Integer.toString(compXY[0] +1) +", " +Integer.toString(compXY[1] +1));
                 packet.sendPacket(out);   
                 turnCounter += 2; // two moves have passed
                 game.printBoardAndResult();
-                if(turnCounter == 36) // Check if the game is over
+                if(turnCounter == 30) // Check if the game is over
                     gameOver = true;
             }
             
