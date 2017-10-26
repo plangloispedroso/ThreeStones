@@ -33,7 +33,7 @@ public class ThreeStonesClient {
     private int computerWins = 0;
     
     public enum Cell {
-        WALL, EMPTY, WHITE, BLACK
+        BLOCK, EMPTY, WHITE, BLACK
     };
     
     /**
@@ -165,20 +165,20 @@ public class ThreeStonesClient {
         for (int i = 0; i < board.length; i++) {
             for (int j = 0; j < board[i].length; j++) {
                 if (i == 0 || i == 1 || i == 9 || i == 10) {
-                    board[i][j] = Cell.WALL;
+                    board[i][j] = Cell.BLOCK;
                 }
                 if (i == 2) {
                     if (j == 4 || j == 5 || j == 6) {
                         board[i][j] = Cell.EMPTY;
                     } else {
-                        board[i][j] = Cell.WALL;
+                        board[i][j] = Cell.BLOCK;
                     }
                 }
                 if (i == 3) {
                     if (j == 3 || j == 4 || j == 5 || j == 6 || j == 7) {
                         board[i][j] = Cell.EMPTY;
                     } else {
-                        board[i][j] = Cell.WALL;
+                        board[i][j] = Cell.BLOCK;
                     }
                 }
 
@@ -186,7 +186,7 @@ public class ThreeStonesClient {
                     if (j == 2 || j == 3 || j == 4 || j == 5 || j == 6 || j == 7 || j == 8) {
                         board[i][j] = Cell.EMPTY;
                     } else {
-                        board[i][j] = Cell.WALL;
+                        board[i][j] = Cell.BLOCK;
                     }
                 }
 
@@ -194,7 +194,7 @@ public class ThreeStonesClient {
                     if (j == 2 || j == 3 || j == 4 || j == 6 || j == 7 || j == 8) {
                         board[i][j] = Cell.EMPTY;
                     } else {
-                        board[i][j] = Cell.WALL;
+                        board[i][j] = Cell.BLOCK;
                     }
                 }
 
@@ -202,7 +202,7 @@ public class ThreeStonesClient {
                     if (j == 2 || j == 3 || j == 4 || j == 5 || j == 6 || j == 7 || j == 8) {
                         board[i][j] = Cell.EMPTY;
                     } else {
-                        board[i][j] = Cell.WALL;
+                        board[i][j] = Cell.BLOCK;
                     }
                 }
 
@@ -210,7 +210,7 @@ public class ThreeStonesClient {
                     if (j == 3 || j == 4 || j == 5 || j == 6 || j == 7) {
                         board[i][j] = Cell.EMPTY;
                     } else {
-                        board[i][j] = Cell.WALL;
+                        board[i][j] = Cell.BLOCK;
                     }
                 }
 
@@ -218,7 +218,7 @@ public class ThreeStonesClient {
                     if (j == 4 || j == 5 || j == 6) {
                         board[i][j] = Cell.EMPTY;
                     } else {
-                        board[i][j] = Cell.WALL;
+                        board[i][j] = Cell.BLOCK;
                     }
                 }
             }
@@ -229,14 +229,18 @@ public class ThreeStonesClient {
      * Print the board and score, only for testing purposes
      */
     public void printBoardAndResult() {
+        System.out.println("----------------------------------------------------"
+            + "-----------------------------------");
         String result = "";
         for (ThreeStonesClient.Cell[] row : board) {
             for (ThreeStonesClient.Cell c : row) {
-                result += " " + c;
+                result += "| " + c+" ";
             }
             result += "\n";
         }
         System.out.println(result);
+        System.out.println("----------------------------------------------------"
+            + "-----------------------------------");
         System.out.println("Total Turns: " + totalTurns);
         System.out.println("Player Score: " + playerScore);
         System.out.println("Comp Score: " + compScore);
