@@ -105,7 +105,7 @@ public class ThreeStonesClient {
         packet.sendPacket(out);
         values = packet.receivePacket(in);
         System.out.println(Integer.toString((int)values[0]));
-        while(totalTurns < 36){
+        while(totalTurns < 30){
             printBoardAndResult();
             System.out.println("Select your Row");
             row = Integer.parseInt(reader.next());

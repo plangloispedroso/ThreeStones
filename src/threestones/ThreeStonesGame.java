@@ -125,12 +125,12 @@ public class ThreeStonesGame {
      * 
      * @return 
      */
-    public int[] compMove(){
+    public int[] compMove(int row, int column){
         if(firstCompMove == true){
             firstCompMove = false;
-            aiRandomMove();
+            aiRandomMove(row, column);
         }else{
-            AIMove();
+            AIMove(row, column);
         }
         totalTurns++;
         return decision;
@@ -139,22 +139,33 @@ public class ThreeStonesGame {
     /**
      * Selects a random place on the board to place a marble
      */
-    public void aiRandomMove() {
+    public void aiRandomMove(int row, int column) {
         int r1;
         int r2;
         boolean invalid = true;
         while (invalid) {
             r1 = (int) (Math.random() * 11);
             r2 = (int) (Math.random() * 11);
-            if (board[r1][r2] == Cell.EMPTY) {
-                board[r1][r2] = Cell.BLACK;
-                System.out.println("Comp placed marble");
-                decision[0] = r1;
-                decision[1] = r2;
-                checkScore(r1, r2);
-                invalid = false;
+            if(r2 == column){ 
+                if (board[r1][r2] == Cell.EMPTY) {
+                    board[r1][r2] = Cell.BLACK;
+                    System.out.println("Comp placed marble");
+                    decision[0] = r1;
+                    decision[1] = r2;
+                    checkScore(r1, r2);
+                    invalid = false;
+                }
+            }else if(r1 == row){
+                if (board[r1][r2] == Cell.EMPTY) {
+                    board[r1][r2] = Cell.BLACK;
+                    System.out.println("Comp placed marble");
+                    decision[0] = r1;
+                    decision[1] = r2;
+                    checkScore(r1, r2);
+                    invalid = false;
+                }
             }
-        }
+        }// end of loop
     }
 
     /**
@@ -267,7 +278,7 @@ public class ThreeStonesGame {
     /**
      * Checks the possibilities for the AI whether it can score or block a point
      */
-    public void AIMove() {
+    public void AIMove(int row, int column) {
         boolean aiMoved = false;
         outerloop:
         for (int i = 0; i < board.length; i++) {

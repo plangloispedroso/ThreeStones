@@ -57,7 +57,7 @@ public class ThreeStonesSession {
                 row = values[1];
                 column = values[2];
                 game.userMove(row, column); // User makes their move to the board
-                compXY = game.compMove(); // Computer decides their move
+                compXY = game.compMove(row, column); // Computer decides their move
                 playerScore = game.getWhiteScore(); // Get the client's score
                 compScore = game.getBlackScore(); // Get the computer's score 
                 // Send the computer's move to the client
