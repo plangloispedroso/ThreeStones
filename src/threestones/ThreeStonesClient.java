@@ -25,13 +25,13 @@ public class ThreeStonesClient {
     private Cell[][] board;
     private int playerScore = 0;
     private int compScore = 0;
-    private int totalTurns = 0;
     private int row;
     private int column;
     private int compRow;
     private int compColumn;
     private int playerWins = 0;
     private int computerWins = 0;
+    private int stonesLeft;
     
     public enum Cell {
         BLOCK, EMPTY, WHITE, BLACK
@@ -114,14 +114,14 @@ public class ThreeStonesClient {
      * server and will tally the victor.
      */
     private void playGame(){
-        totalTurns = 0;
         playerScore = 0;
         compScore = 0;
+        stonesLeft = 15;
         byte[] values = new byte[5];
         instantiateBoard();
         ThreeStonesPacket packet;
         // Gameplay loop
-        while(totalTurns < 30){
+        while(stonesLeft > 0){
             printBoardAndResult(); // Display board to the user
             // Get user input
             System.out.println("Select your Row");
@@ -151,13 +151,15 @@ public class ThreeStonesClient {
                 +", " +Integer.toString((int)values[2] +1));
             playerScore = (int) values[3];
             compScore = (int) values[4];
-            totalTurns += 2;
+            stonesLeft--;
         }
         // Tall who won the game
         if(playerScore >= compScore){
             playerWins++;
+            System.out.println("\n YOU WIN");
         }else{
             computerWins++;
+            System.out.println("\n YOU LOSE");
         }     
     }
     
@@ -240,7 +242,7 @@ public class ThreeStonesClient {
         System.out.println(result);
         System.out.println("---------------------------------------------------"
             + "------------------------------------");
-        System.out.println("Stones Left: " +(30-(totalTurns/2)));
+        System.out.println("Stones Left: " +stonesLeft);
         System.out.println("Player Score: " + playerScore);
         System.out.println("Comp Score: " + compScore);                     
     }

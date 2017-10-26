@@ -59,8 +59,8 @@ public class ThreeStonesSession {
                 playerColumn   = (int) values[2];
                 
                 if(firstMove){
-                    while(!game.isEmptyCell(playerRow, playerColumn) && (playerRow > 11)
-                            && (playerColumn > 11)){
+                    while(!game.isEmptyCell(playerRow, playerColumn) || (playerRow > 11)
+                            || (playerColumn > 11)){
                         packet = new ThreeStonesPacket(6, 0, 0, playerScore, compScore);
                         packet.sendPacket(out);
                         values = packet.receivePacket(in);
@@ -68,10 +68,10 @@ public class ThreeStonesSession {
                         playerColumn   = (int) values[2];
                     }
                     firstMove = false;
-                }else if(!firstMove){
-                    while((compXY[0] != playerRow) && (compXY[1] != (playerColumn)
-                            && (game.isEmptyCell(playerRow, playerColumn) == false) 
-                            &&(playerRow > 11) &&(playerColumn > 11))){
+                }else{
+                    while(((compXY[0] != playerRow) && (compXY[1] != (playerColumn))
+                            || (game.isEmptyCell(playerRow, playerColumn) == false) 
+                            || (playerRow > 11) || (playerColumn > 11))){
                         packet = new ThreeStonesPacket(6, 0, 0, playerScore, compScore);
                         packet.sendPacket(out);
                         values = packet.receivePacket(in);
