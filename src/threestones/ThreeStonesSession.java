@@ -105,6 +105,5 @@ public class ThreeStonesSession {
                 playAgain = false; // client does not want to play again.
             }
         }
-        clientSocket.close(); // close the connection
     }
 }
