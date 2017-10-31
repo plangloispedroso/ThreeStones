@@ -77,13 +77,4 @@ public class ThreeStonesPacket {
         //System.out.println("Sending Packet");
         //checkValues(); 
     }
-    
-    /**
-     * Helper method to make sure packets contain what they should.
-     * DELETE LATER
-     */
-    private void checkValues(){
-        System.out.println(packet[0] +", " +packet[1] +", " +packet[2] +", "
-            +packet[3] +", " +packet[4]);
-    }
 }

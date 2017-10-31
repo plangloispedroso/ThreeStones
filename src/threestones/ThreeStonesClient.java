@@ -163,7 +163,8 @@ public class ThreeStonesClient {
     }
     
     /**
-     * MEthod that when called will instantiate a new board for the user.
+     * Method that when called will instantiate a new board for the user.
+     * By filling the 2D array will their appropriate starting cells.
      */
     private void instantiateBoard(){
         board = new Cell[11][11];
