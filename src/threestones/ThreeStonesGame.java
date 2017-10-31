@@ -138,7 +138,7 @@ public class ThreeStonesGame {
      * @param row
      * @param column
      */
-    public void aiRandomMove(int row, int column) {
+    private void aiRandomMove(int row, int column) {
         int r1;
         int r2;
         boolean invalid = true;
@@ -175,7 +175,7 @@ public class ThreeStonesGame {
      * @param column
      * @return 
      */
-    public int[] aiMove(int row, int column){
+    private int[] aiMove(int row, int column){
         for(int i = 0; i < 11; i++){
             // Check if comp can score horizontally
             if(board[row][i] == Cell.BLACK && board[row][i+1] == Cell.BLACK 
@@ -381,7 +381,7 @@ public class ThreeStonesGame {
     }   
      
     /**
-     * MEthod that will take coordinates and check if the cell associated with
+     * Method that will take coordinates and check if the cell associated with
      * those coordinates and return wether that cell is empty or not.
      * 
      * @param row

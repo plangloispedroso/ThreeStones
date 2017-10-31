@@ -17,7 +17,7 @@ import java.net.UnknownHostException;
 public class ThreeStonesServer {
     
     private static final int PORTNUMBER = 50000;
-    ServerSocket servSocket;
+    private ServerSocket servSocket;
     
     /**
      * Default constructor.

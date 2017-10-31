@@ -27,8 +27,6 @@ public class ThreeStonesClient {
     private int compScore = 0;
     private int row;
     private int column;
-    private int compRow;
-    private int compColumn;
     private int playerWins = 0;
     private int computerWins = 0;
     private int stonesLeft;
@@ -52,6 +50,7 @@ public class ThreeStonesClient {
      */
     public void makeConnection(){
        try{
+           // Instantiate the socket object with it's streams.
            socket = new Socket(address, PORTNUMBER);
            in = socket.getInputStream();
            out = socket.getOutputStream();
@@ -229,7 +228,7 @@ public class ThreeStonesClient {
     /**
      * Print the board and score to show the user the current state of a game.
      */
-    public void printBoardAndResult() {
+    private void printBoardAndResult() {
         System.out.println("---------------------------------------------------"
             + "------------------------------------");
         String result = "";
