@@ -1,8 +1,10 @@
-package threestones;
+package threestonesserver;
 
 import java.io.*;
 import java.net.Socket;
 import java.util.Scanner;
+import threestones.ThreeStonesGame;
+import threestonesdatacomm.ThreeStonesPacket;
 
 /**
  * Class that represents a game session between a client and a server.

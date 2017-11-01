@@ -1,5 +1,8 @@
 package threestones;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Class designed to simulate the board of a game of ThreeStones along with
  * the game's rule-sets.
@@ -169,7 +172,7 @@ public class ThreeStonesGame {
     
     /**
      * Method that will perform the computer's move. The computer will prioritize
-     * scoring a point over bloacking a point form the client.
+     * scoring a point over blocking a point form the client.
      * 
      * @param row
      * @param column
@@ -393,5 +396,152 @@ public class ThreeStonesGame {
             return true;
         }
         return false;
+    }
+    
+    /**
+     * Gets a list of all possible cell that can generate points
+     * @param row       The last row of the user play
+     * @param column    The last column of the user play
+     * @return          A list of all cells with possible points generated
+     */
+    public List<PointChecker> getListOfPossiblePoints(int row, int column) {
+        int points = 0;
+        List<PointChecker> list = new ArrayList<PointChecker>();
+        
+        // Check row first
+        for (int i = 0; i < board.length; i++) {
+            // Reset the points for the next empty cell
+            points = 0;
+            if (board[i][row] == Cell.EMPTY) {
+                // Check for horizontal points
+                if (board[i - 1][row] == Cell.BLACK && board[i - 2][row] == Cell.BLACK) {
+                    points++;
+                }
+                if (board[i -1][row] == Cell.BLACK && board[i + 1][row] == Cell.BLACK) {
+                    points++;
+                }
+                if (board[i + 1][row] == Cell.BLACK && board[i + 2][row] == Cell.BLACK) {
+                    points++;
+                }
+                
+                // Check for vertical points
+                if (board[i][row - 1] == Cell.BLACK && board[i][row - 2] == Cell.BLACK) {
+                    points++;
+                }
+                if (board[i][row - 1] == Cell.BLACK && board[i][row + 1] == Cell.BLACK) {
+                    points++;
+                }
+                if (board[i][row + 1] == Cell.BLACK && board[i][row + 2] == Cell.BLACK) {
+                    points++;
+                }
+                
+                // Check diagonal points
+                if (board[i - 1][row - 1] == Cell.BLACK && board[i - 2][row - 2] == Cell.BLACK) {
+                    points++;
+                }
+                if (board[i - 1][row - 1] == Cell.BLACK && board[i + 1][row + 1] == Cell.BLACK) {
+                    points++;
+                }
+                if (board[i + 1][row + 1] == Cell.BLACK && board[i + 2][row + 2] == Cell.BLACK) {
+                    points++;
+                }
+                if (board[i - 1][row + 1] == Cell.BLACK && board[i - 2][row + 2] == Cell.BLACK) {
+                    points++;
+                }
+                if (board[i - 1][row + 1] == Cell.BLACK && board[i + 1][row - 1] == Cell.BLACK) {
+                    points++;
+                }
+                if (board[i + 1][row - 1] == Cell.BLACK && board[i + 2][row - 2] == Cell.BLACK) {
+                    points ++;
+                }
+                PointChecker pc = new PointChecker(i, row, points);
+                list.add(pc);
+            }
+        }
+        
+        // Check columns
+        for (int i = 0; i < board.length; i++) {
+            // Reset the points for the next empty cell
+            points = 0;
+            if (board[column][i] == Cell.EMPTY) {
+                // Check for horizontal points
+                if (board[column - 1][i] == Cell.BLACK && board[column - 2][i] == Cell.BLACK) {
+                    points++;
+                }
+                if (board[column - 1][i] == Cell.BLACK && board[column + 1][i] == Cell.BLACK) {
+                    points++;
+                }
+                if (board[column + 1][i] == Cell.BLACK && board[column + 2][i] == Cell.BLACK) {
+                    points++;
+                }
+                
+                // Check for vertical points
+                if (board[column][i - 1] == Cell.BLACK && board[column][i - 2] == Cell.BLACK) {
+                    points++;
+                }
+                if (board[column][i - 1] == Cell.BLACK && board[column][i + 1] == Cell.BLACK) {
+                    points++;
+                }
+                if (board[column][i + 1] == Cell.BLACK && board[column][i + 2] == Cell.BLACK) {
+                    points++;
+                }
+                
+                // Check diagonal points
+                if (board[column - 1][i - 1] == Cell.BLACK && board[column - 2][i - 2] == Cell.BLACK) {
+                    points++;
+                }
+                if (board[column - 1][i - 1] == Cell.BLACK && board[column + 1][i + 1] == Cell.BLACK) {
+                    points++;
+                }
+                if (board[column + 1][i + 1] == Cell.BLACK && board[column + 2][i + 2] == Cell.BLACK) {
+                    points++;
+                }
+                if (board[column - 1][i + 1] == Cell.BLACK && board[column - 2][i + 2] == Cell.BLACK) {
+                    points++;
+                }
+                if (board[column - 1][i + 1] == Cell.BLACK && board[column + 1][i - 1] == Cell.BLACK) {
+                    points++;
+                }
+                if (board[column + 1][i - 1] == Cell.BLACK && board[column + 2][i - 2] == Cell.BLACK) {
+                    points ++;
+                }
+                PointChecker pc = new PointChecker(column, i, points);
+                list.add(pc);
+            }
+        }
+        
+        return list;
+    }
+    
+    /**
+     * Returns the coordinates of the cell that will return the most points
+     * @param list  List of all empty cell that can generate points
+     * @return      The cell with most points generated
+     */
+    public int[] getCoordinatesOfCellWithMostPoints(List<PointChecker> list) {
+        int[] position = new int[2];
+        PointChecker mp = new PointChecker();
+        int max = 0;
+        
+        // Checks if the list is empty, if not, max is set to the first position with points
+        if (!list.isEmpty()) {
+            max = list.get(0).getPoints();
+        } else {
+            return null;
+        }
+        
+        // Compare each position with points, the maximum gets put into mp
+        for (int i = 1; i < list.size(); i++) {
+            if (list.get(i).getPoints() > max) {
+                max = list.get(i).getPoints();
+                mp = list.get(i);
+            }
+        }
+        
+        position[0] = mp.getRow();
+        position[1] = mp.getColumn();
+        
+        return position;
+        
     }
 }

@@ -1,5 +1,6 @@
-package threestones;
+package threestonesclient;
 
+import threestonesclient.ThreeStonesClient;
 import java.util.Scanner;
 
 /**

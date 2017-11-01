@@ -1,4 +1,4 @@
-package threestones;
+package threestonesserver;
 
 import java.io.IOException;
 
