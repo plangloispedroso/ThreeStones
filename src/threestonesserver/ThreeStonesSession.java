@@ -62,36 +62,40 @@ public class ThreeStonesSession {
                     gameOver = true;
                 }
 
+                // First time you enter the loop, validMove is always false
                 while (!validMove) {
                     values = packet.receivePacket(in);
                     playerRow = (int) values[1];
                     playerColumn = (int) values[2];
 
+                    // If first move, check if cell is empty
                     if (firstMove) {
                         if (game.isEmptyCell(playerRow, playerColumn)) {
                             validMove = true;
                             firstMove = false;
                         }
-                    }else{
-                        if(!game.isThereAnAvailableMove(compXY[0], compXY[1])){
-                            if(game.isEmptyCell(playerRow, playerColumn) == true){
+                    } else {
+                        // Check if there is an available move
+                        if (!game.isThereAnAvailableMove(compXY[0], compXY[1])) {
+                            if (game.isEmptyCell(playerRow, playerColumn) == true) {
                                 validMove = true;
                             }
-                        }else{
-                            if(playerRow == compXY[0] || playerColumn == compXY[1]){
-                                if(game.isEmptyCell(playerRow, playerColumn)){
+                        } else {
+                            // Check if the player column and player row is the same as computer
+                            if (playerRow == compXY[0] || playerColumn == compXY[1]) {
+                                if (game.isEmptyCell(playerRow, playerColumn)) {
                                     validMove = true;
                                 }
                             }
                         }
                     }
-                    
+                    // Sends the error packet
                     if (validMove == false) {
                         packet = new ThreeStonesPacket(6, 0, 0, playerScore, compScore);
                         packet.sendPacket(out);
                     }
                 }
-                
+
                 validMove = false;
 
                 game.userMove(playerRow, playerColumn); // User makes their move to the board 

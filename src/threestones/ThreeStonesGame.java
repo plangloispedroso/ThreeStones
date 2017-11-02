@@ -188,83 +188,8 @@ public class ThreeStonesGame {
             board[decision[0]][decision[1]] = Cell.BLACK;
         } else {
             aiRandomMove(row, column);
-            //return null;
         }
-        /*else {
-            for (int i = 0; i < 11; i++) {
-                // Check if comp can score horizontally
-                if (board[row][i] == Cell.BLACK && board[row][i + 1] == Cell.BLACK
-                        && board[row][i + 2] == Cell.EMPTY) {
-                    decision[0] = row;
-                    decision[1] = i + 2;
-                    break;
-                } else if (board[row][i + 1] == Cell.BLACK && board[row][i + 2] == Cell.BLACK
-                        && board[row][i] == Cell.EMPTY) {
-                    decision[0] = row;
-                    decision[1] = i;
-                    break;
-                } else if (board[row][i] == Cell.BLACK && board[row][i + 2] == Cell.BLACK
-                        && board[row][i + 1] == Cell.EMPTY) {
-                    decision[0] = row;
-                    decision[1] = i + 1;
-                    break;
-                } //check if comp can score vertically
-                else if (board[i][column] == Cell.BLACK && board[i + 1][column] == Cell.BLACK
-                        && board[i + 2][column] == Cell.EMPTY) {
-                    decision[0] = i + 2;
-                    decision[1] = column;
-                    break;
-                } else if (board[i + 1][column] == Cell.BLACK && board[i + 2][column] == Cell.BLACK
-                        && board[i][column] == Cell.EMPTY) {
-                    decision[0] = i;
-                    decision[1] = column;
-                    break;
-                } else if (board[i][column] == Cell.BLACK && board[i + 2][column] == Cell.BLACK
-                        && board[i + 1][column] == Cell.EMPTY) {
-                    decision[0] = i + 1;
-                    decision[1] = column;
-                    break;
-                }
-                // check if comp can block horizontally
-                if (board[row][i] == Cell.WHITE && board[row][i + 1] == Cell.WHITE
-                        && board[row][i + 2] == Cell.EMPTY) {
-                    decision[0] = row;
-                    decision[1] = i + 2;
-                    break;
-                } else if (board[row][i + 1] == Cell.WHITE && board[row][i + 2] == Cell.WHITE
-                        && board[row][i] == Cell.EMPTY) {
-                    decision[0] = row;
-                    decision[1] = i;
-                    break;
-                } else if (board[row][i] == Cell.WHITE && board[row][i + 2] == Cell.WHITE
-                        && board[row][i + 1] == Cell.EMPTY) {
-                    decision[0] = row;
-                    decision[1] = i + 1;
-                    break;
 
-                }//check if comp can block vertically
-                else if (board[i][column] == Cell.WHITE && board[i + 1][column] == Cell.WHITE
-                        && board[i + 2][column] == Cell.EMPTY) {
-                    decision[0] = i + 2;
-                    decision[1] = column;
-                    break;
-                } else if (board[i + 1][column] == Cell.WHITE && board[i + 2][column] == Cell.WHITE
-                        && board[i][column] == Cell.EMPTY) {
-                    decision[0] = i;
-                    decision[1] = column;
-                    break;
-                } else if (board[i][column] == Cell.WHITE && board[i + 2][column] == Cell.WHITE
-                        && board[i + 1][column] == Cell.EMPTY) {
-                    decision[0] = i + 1;
-                    decision[1] = column;
-                    break;
-                } else {
-                    aiRandomMove(row, column);
-                    return null;
-                }
-                //check to score diagonally
-            }// i loop
-        }*/
         checkScore(decision[0], decision[1]);
         return decision;
     }
@@ -633,24 +558,10 @@ public class ThreeStonesGame {
                 list.add(pc);
             }
         }
-        
-        System.out.println("list size: " + list.size());
+
         // The coordinates of the best position to play
         int[] bestPosition = new int[2];
-        System.out.println("Now removing actual empties");
-        for(PointChecker pc : list){
-            System.out.println("CHECK: " +board[pc.getRow()][pc.getColumn()]);
-            if(board[pc.getRow()][pc.getColumn()] != Cell.EMPTY){
-                System.out.println(Integer.toString(pc.getRow()+1) +", " +Integer.toString(pc.getColumn()+1) +" was actually empty");
-                list.remove(pc);
-            }
-        }
-        
         bestPosition = getCoordinatesOfCellWithMostPoints(list);
-        System.out.println("list size: " + list.size());
-        for (PointChecker pc : list) {
-            System.out.println(Integer.toString(pc.getRow()+1) +", " +Integer.toString(pc.getColumn()+1) +", " +Integer.toString(pc.getPoints()));
-        }
 
         return bestPosition;
     }
@@ -682,6 +593,7 @@ public class ThreeStonesGame {
             position[0] = pc.getRow();
             position[1] = pc.getColumn();
         } else {
+            // Default position if the list is empty
             position[0] = 0;
             position[1] = 0;
         }
@@ -690,7 +602,7 @@ public class ThreeStonesGame {
     }
     
     /**
-     * 
+     * Checks to see if there is an available move
      * @return 
      */
     public boolean isThereAnAvailableMove(int row, int column){

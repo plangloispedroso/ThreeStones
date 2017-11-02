@@ -31,7 +31,11 @@ public class ThreeStonesClient {
     private int playerWins = 0;
     private int computerWins = 0;
     private int stonesLeft;
-
+    public static final String ANSI_RED = "\u001B[31m";
+    public static final String ANSI_RESET = "\u001B[0m";
+    public static final String ANSI_BLUE = "\u001B[34m";
+    public static final String ANSI_PURPLE = "\u001B[35m";
+    
     public enum Cell {
         BLOCK, EMPTY, WHITE, BLACK
     };
@@ -279,8 +283,15 @@ public class ThreeStonesClient {
             } else if (counter >= 10) {
                 result += counter + " ";
             }
-            for (ThreeStonesClient.Cell c : row) {
-                result += "| " + c + " ";
+            for (ThreeStonesClient.Cell c : row) {                
+                if (c == Cell.WHITE) {
+                    result += "| " + ANSI_BLUE + c + ANSI_RESET + " ";
+                } else if (c == Cell.BLACK) {
+                    result += "| " + ANSI_RED + c + ANSI_RESET + " ";
+                }
+                else {
+                    result += "| " + c + " ";
+                }
             }
             counter++;
             result += "\n";
