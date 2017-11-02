@@ -181,12 +181,14 @@ public class ThreeStonesGame {
      */
     private int[] aiMove(int row, int column) {
         int[] bestPosition = getListOfPossiblePoints(row, column);
+
         if (bestPosition[0] != 0 && bestPosition[1] != 0) {
             decision[0] = bestPosition[0];
             decision[1] = bestPosition[1];
+            board[decision[0]][decision[1]] = Cell.BLACK;
         } else {
             aiRandomMove(row, column);
-            return null;
+            //return null;
         }
         /*else {
             for (int i = 0; i < 11; i++) {
@@ -415,14 +417,14 @@ public class ThreeStonesGame {
      * @return The best position to place a marble
      */
     public int[] getListOfPossiblePoints(int row, int column) {
-        //int points = 0;
+        int points = 0;
         List<PointChecker> list = new ArrayList<>();
 
         // Scoring
         // Check row for black
         for (int i = 0; i < board.length; i++) {
             // Reset the points for the next empty cell
-            int points = 0;
+            points = 0;
             if (board[row][i] == Cell.EMPTY) {
                 // Check for horizontal points
                 if (board[row][i - 1] == Cell.BLACK && board[row][i - 2] == Cell.BLACK) {
@@ -465,17 +467,17 @@ public class ThreeStonesGame {
                 if (board[row + 1][i - 1] == Cell.BLACK && board[row + 2][i - 2] == Cell.BLACK) {
                     points++;
                 }
-                if (points > 0) {
-                    PointChecker pc = new PointChecker(row, i, points);
-                    list.add(pc);
-                }
+            }
+            if (points > 0) {
+                PointChecker pc = new PointChecker(row, i, points);
+                list.add(pc);
             }
         }
 
         // Check columns for black
         for (int i = 0; i < board.length; i++) {
             // Reset the points for the next empty cell
-            int points = 0;
+            points = 0;
             if (board[i][column] == Cell.EMPTY) {
                 // Check for horizontal points
                 if (board[i - 1][column] == Cell.BLACK && board[i - 2][column] == Cell.BLACK) {
@@ -518,10 +520,10 @@ public class ThreeStonesGame {
                 if (board[i + 1][column - 1] == Cell.BLACK && board[i + 2][column - 2] == Cell.BLACK) {
                     points++;
                 }
-                if (points > 0) {
-                    PointChecker pc = new PointChecker(i, column, points);
-                    list.add(pc);
-                }
+            }
+            if (points > 0) {
+                PointChecker pc = new PointChecker(i, column, points);
+                list.add(pc);
             }
         }
 
@@ -529,7 +531,7 @@ public class ThreeStonesGame {
         // Check row for white
         for (int i = 0; i < board.length; i++) {
             // Reset the points for the next empty cell
-            int points = 0;
+            points = 0;
             if (board[row][i] == Cell.EMPTY) {
                 // Check for vertical points
                 if (board[row][i - 1] == Cell.WHITE && board[row][i - 2] == Cell.WHITE) {
@@ -572,17 +574,17 @@ public class ThreeStonesGame {
                 if (board[row + 1][i - 1] == Cell.WHITE && board[row + 2][i - 2] == Cell.WHITE) {
                     points++;
                 }
-                if (points > 0) {
-                    PointChecker pc = new PointChecker(row, i, points);
-                    list.add(pc);
-                }
+            }
+            if (points > 0) {
+                PointChecker pc = new PointChecker(row, i, points);
+                list.add(pc);
             }
         }
 
         // Check columns for white
         for (int i = 0; i < board.length; i++) {
             // Reset the points for the next empty cell
-            int points = 0;
+            points = 0;
             if (board[i][column] == Cell.EMPTY) {
                 // Check for vertical points
                 if (board[i - 1][column] == Cell.WHITE && board[i - 2][column] == Cell.WHITE) {
@@ -625,16 +627,30 @@ public class ThreeStonesGame {
                 if (board[i + 1][column - 1] == Cell.WHITE && board[i + 2][column - 2] == Cell.WHITE) {
                     points++;
                 }
-                if (points > 0) {
-                    PointChecker pc = new PointChecker(i, column, points);
-                    list.add(pc);
-                }
+            }
+            if (points > 0) {
+                PointChecker pc = new PointChecker(i, column, points);
+                list.add(pc);
             }
         }
-
+        
+        System.out.println("list size: " + list.size());
         // The coordinates of the best position to play
         int[] bestPosition = new int[2];
+        System.out.println("Now removing actual empties");
+        for(PointChecker pc : list){
+            System.out.println("CHECK: " +board[pc.getRow()][pc.getColumn()]);
+            if(board[pc.getRow()][pc.getColumn()] != Cell.EMPTY){
+                System.out.println(Integer.toString(pc.getRow()+1) +", " +Integer.toString(pc.getColumn()+1) +" was actually empty");
+                list.remove(pc);
+            }
+        }
+        
         bestPosition = getCoordinatesOfCellWithMostPoints(list);
+        System.out.println("list size: " + list.size());
+        for (PointChecker pc : list) {
+            System.out.println(Integer.toString(pc.getRow()+1) +", " +Integer.toString(pc.getColumn()+1) +", " +Integer.toString(pc.getPoints()));
+        }
 
         return bestPosition;
     }
@@ -671,5 +687,17 @@ public class ThreeStonesGame {
         }
 
         return position;
+    }
+    
+    /**
+     * 
+     * @return 
+     */
+    public boolean isThereAnAvailableMove(int row, int column){
+        for(int x = 0; x < board.length; x++){
+            if(board[row][x] == Cell.EMPTY || board[x][column] == Cell.EMPTY)
+                return true;
+        }
+        return false;
     }
 }

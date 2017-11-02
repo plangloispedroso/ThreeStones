@@ -78,7 +78,7 @@ public class ThreeStonesClient {
             do {
                 System.out.println("Would you like to play a game (y/n)");
                 answer = reader.next();
-            } while (!answer.equals("y"));
+            } while (!answer.equals("y") && !answer.equals("n"));
             if (answer.equals("y")) {
                 // Tell the server that the client would like to play a game
                 packet = new ThreeStonesPacket(1, 0, 0, 0, 0);
