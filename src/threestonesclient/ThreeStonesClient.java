@@ -75,8 +75,10 @@ public class ThreeStonesClient {
             ThreeStonesPacket packet;
             System.out.println("You have won: " + playerWins + " time(s).");
             System.out.println("You have lost: " + computerWins + " time(s).");
-            System.out.println("Would you like to play a game (y/n)");
-            answer = reader.next();
+            do {
+                System.out.println("Would you like to play a game (y/n)");
+                answer = reader.next();
+            } while (!answer.equals("y"));
             if (answer.equals("y")) {
                 // Tell the server that the client would like to play a game
                 packet = new ThreeStonesPacket(1, 0, 0, 0, 0);
@@ -124,10 +126,24 @@ public class ThreeStonesClient {
         while (stonesLeft > 0) {
             printBoardAndResult(); // Display board to the user
             // Get user input
-            System.out.println("Select your Row");
-            row = Integer.parseInt(reader.next());
-            System.out.println("Select your Column");
-            column = Integer.parseInt(reader.next());
+            do {
+                System.out.println("Select your Row");
+                while (!reader.hasNextInt()) {
+                    System.out.println("That's not a number, please enter a number!");
+                    System.out.println("Select your Row");
+                    reader.next();
+                }
+                row = reader.nextInt();
+            } while (row < 1 || row > 11);
+            do {
+                System.out.println("Select your Column");
+                while (!reader.hasNextInt()) {
+                    System.out.println("That's not a number, please enter a number!");
+                    System.out.println("Select your Column");
+                    reader.next();
+                }
+                column = reader.nextInt();
+            } while (column < 1 || column > 11);
             // Create the packet to be sent
             packet = new ThreeStonesPacket(4, row - 1, column - 1, playerScore, compScore);
             packet.sendPacket(out); // Send the packet to the server
@@ -244,10 +260,19 @@ public class ThreeStonesClient {
      */
     private void printBoardAndResult() {
         int counter = 1;
+        int counterRow = 1;
         System.out.println("---------------------------------------------------"
                 + "---------------------------------------");
         String result = "";
-        result += "       1       2       3       4       5       6       7       8       9       10      11" + "\n";
+        for (int i = 0; i < board.length; i++) {
+            if (counterRow < 10) {
+                result += "       " + counterRow;
+            } else if (counterRow >= 10) {
+                result += "      " + counterRow;
+            }
+            counterRow++;
+        }
+        result += "\n";
         for (ThreeStonesClient.Cell[] row : board) {
             if (counter < 10) {
                 result += counter + "  ";

@@ -58,8 +58,6 @@ public class ThreeStonesPacket {
         }catch(IOException e){
             System.out.println("There was a problem receiving the packet");
         }
-        //System.out.println("Receiving Packet");
-        //checkValues();
         return packet;
     }
     
@@ -74,7 +72,5 @@ public class ThreeStonesPacket {
         }catch(IOException e){
             System.out.println("There was a problem sending the packet");
         }
-        //System.out.println("Sending Packet");
-        //checkValues(); 
     }
 }
