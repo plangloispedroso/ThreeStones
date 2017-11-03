@@ -1,9 +1,11 @@
-
 package threestones;
 
 /**
- *
- * @author Kevin
+ * Class to keep track of given values for rows, columns and points
+ * To be used by the ThreeStonesGame.
+ * 
+ * @author Kevin Bui
+ * @version 1.0
  */
 public class PointChecker {
     private int row;

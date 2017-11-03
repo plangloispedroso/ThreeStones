@@ -9,7 +9,7 @@ import threestonesdatacomm.ThreeStonesPacket;
 /**
  * Class that represents a game session between a client and a server.
  *
- * @authors Philippe Langlois-Pedroso, Kevin Bui and Amin Manai.
+ * @authors Philippe Langlois-Pedroso and Kevin Bui
  * @version 1.0
  */
 public class ThreeStonesSession {

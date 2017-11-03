@@ -7,8 +7,8 @@ import java.util.List;
  * Class designed to simulate the board of a game of ThreeStones along with the
  * game's rule-sets.
  *
- * @authors Philippe Langlois-Pedroso, Kevin Bui and Amin Manai.
- * @version 1.0
+ * @authors Philippe Langlois-Pedroso and Kevin Bui
+ * @version 1.1
  */
 public class ThreeStonesGame {
 

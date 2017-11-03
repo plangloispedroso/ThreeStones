@@ -15,7 +15,7 @@ import java.io.OutputStream;
  * opCode = 5 -> Server asks user to play again.
  * opCode = 6 -> Client tried to make an invalid move
  * 
- * @authors Philippe Langlois-Pedroso, Kevin Bui and Amin Manai.
+ * @authors Philippe Langlois-Pedroso and Kevin Bui
  * @version 1.0
  */
 public class ThreeStonesPacket {

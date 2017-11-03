@@ -10,7 +10,7 @@ import threestonesdatacomm.ThreeStonesPacket;
 /**
  * Class that creates a Client to enter a session of ThreeStones with a server.
  *
- * @authors Philippe Langlois-Pedroso, Kevin Bui and Amin Manai.
+ * @authors Philippe Langlois-Pedroso and Kevin Bui
  * @version 1.0
  */
 public class ThreeStonesClient {

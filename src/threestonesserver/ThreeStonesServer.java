@@ -12,7 +12,7 @@ import java.net.UnknownHostException;
 /**
  * Class that handles all the tasks that a server will perform.
  * 
- * @authors Philippe Langlois-Pedroso, Kevin Bui and Amin Manai.
+ * @authors Philippe Langlois-Pedroso and Kevin Bui
  * @version 1.0
  */
 public class ThreeStonesServer {
