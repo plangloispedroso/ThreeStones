@@ -12,7 +12,7 @@ import threestonesdatacomm.ThreeStonesPacket;
  * @authors Philippe Langlois-Pedroso and Kevin Bui
  * @version 1.0
  */
-public class ThreeStonesSession {
+public class ThreeStonesSession implements Runnable {
 
     private boolean playAgain;
     private boolean gameOver;
@@ -120,5 +120,15 @@ public class ThreeStonesSession {
                 playAgain = false; // client does not want to play again.
             }
         }
+    }
+
+   @Override
+    public void run() {
+        try {
+            playSession();
+        } catch (Exception ex) {
+            System.out.println("Exception: " + ex.getMessage());
+        }
+        System.out.println("Finished serving lient");
     }
 }

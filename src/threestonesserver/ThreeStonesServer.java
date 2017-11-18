@@ -40,29 +40,33 @@ public class ThreeStonesServer {
      * @throws IOException 
      */
     public void runServer()throws IOException{
-        for(;;){
-            try{
-                InetAddress address = InetAddress.getLocalHost();
-                System.out.println("The address of this machine is: " +address.getHostAddress());
-            }catch(UnknownHostException uhe){
-                System.out.println("Unable to determine the host's address.");
+        for (;;) {
+                try {
+                    InetAddress address = InetAddress.getLocalHost();
+                    System.out.println("The address of this machine is: " + address.getHostAddress());
+                } catch (UnknownHostException uhe) {
+                    System.out.println("Unable to determine the host's address.");
+                }
+        
+        while (true) {
+                // Start looking for clients
+                System.out.println("Now looking for clients.");
+                Socket clientSocket = servSocket.accept();
+                System.out.println("Handling client at: "
+                        + clientSocket.getInetAddress().getHostAddress()
+                        + " on port: " + clientSocket.getLocalPort());
+
+                // Create a new session with client
+                InputStream in = clientSocket.getInputStream();
+                OutputStream out = clientSocket.getOutputStream();
+                ThreeStonesSession session = new ThreeStonesSession(in, out);
+                Thread game = new Thread(session);
+                // Start playing with the client
+                game.start();
+                System.out.println("Handling client " + clientSocket.getInetAddress().getHostAddress());
+                /*clientSocket.close();
+                System.out.println("Client has disconnected");*/
             }
-            
-            // Start looking for clients
-            System.out.println("Now looking for clients.");       
-            Socket clientSocket = servSocket.accept();
-            System.out.println("Handling client at: " 
-                +clientSocket.getInetAddress().getHostAddress()
-                +" on port: " +clientSocket.getLocalPort());
-            
-            // Create a new session with client
-            InputStream in = clientSocket.getInputStream();
-            OutputStream out = clientSocket.getOutputStream();
-            ThreeStonesSession session = new ThreeStonesSession(in, out);
-            // Start playing with the client
-            session.playSession();
-            clientSocket.close();
-            System.out.println("Client has disconnected");
         }
     }
 }
