@@ -64,8 +64,6 @@ public class ThreeStonesServer {
                 // Start playing with the client
                 game.start();
                 System.out.println("Handling client " + clientSocket.getInetAddress().getHostAddress());
-                /*clientSocket.close();
-                System.out.println("Client has disconnected");*/
             }
         }
     }
