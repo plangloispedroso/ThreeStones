@@ -50,6 +50,7 @@ public class ThreeStonesPacket {
      * Method that will send the packet through the InputStream
      * 
      * @param in
+     * @throws IOException
      * @return 
      */
     public byte[] receivePacket(InputStream in)throws IOException{
@@ -61,6 +62,7 @@ public class ThreeStonesPacket {
      * Method that will send the packet through the OutputSteam
      * 
      * @param out
+     * @throws IOException
      */
     public void sendPacket(OutputStream out)throws IOException{
         out.write(packet);

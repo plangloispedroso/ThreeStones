@@ -129,6 +129,6 @@ public class ThreeStonesSession implements Runnable {
         } catch (Exception ex) {
             System.out.println("Exception: " + ex.getMessage());
         }
-        System.out.println("Finished serving lient");
+        System.out.println("Finished serving client");
     }
 }

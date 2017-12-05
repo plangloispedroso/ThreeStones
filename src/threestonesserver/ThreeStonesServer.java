@@ -1,6 +1,5 @@
 package threestonesserver;
 
-import threestonesserver.ThreeStonesSession;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -67,8 +66,8 @@ public class ThreeStonesServer {
                 }catch(Exception e){
                     in.close();
                     out.close();
+                    System.out.println(e.getMessage());
                 }
-                System.out.println("Handling client " + clientSocket.getInetAddress().getHostAddress());
             }
         }
     }
