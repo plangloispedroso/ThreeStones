@@ -62,7 +62,12 @@ public class ThreeStonesServer {
                 ThreeStonesSession session = new ThreeStonesSession(in, out);
                 Thread game = new Thread(session);
                 // Start playing with the client
-                game.start();
+                try{
+                    game.start();
+                }catch(Exception e){
+                    in.close();
+                    out.close();
+                }
                 System.out.println("Handling client " + clientSocket.getInetAddress().getHostAddress());
             }
         }

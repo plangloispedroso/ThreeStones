@@ -123,7 +123,7 @@ public class ThreeStonesSession implements Runnable {
     }
 
    @Override
-    public void run() {
+    public void run(){
         try {
             playSession();
         } catch (Exception ex) {

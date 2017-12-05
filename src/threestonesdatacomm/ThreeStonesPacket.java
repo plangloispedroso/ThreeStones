@@ -52,12 +52,8 @@ public class ThreeStonesPacket {
      * @param in
      * @return 
      */
-    public byte[] receivePacket(InputStream in){
-        try{
+    public byte[] receivePacket(InputStream in)throws IOException{
             in.read(packet);
-        }catch(IOException e){
-            System.out.println("There was a problem receiving the packet");
-        }
         return packet;
     }
     
@@ -66,11 +62,7 @@ public class ThreeStonesPacket {
      * 
      * @param out
      */
-    public void sendPacket(OutputStream out){
-        try{
-            out.write(packet);
-        }catch(IOException e){
-            System.out.println("There was a problem sending the packet");
-        }
+    public void sendPacket(OutputStream out)throws IOException{
+        out.write(packet);
     }
 }

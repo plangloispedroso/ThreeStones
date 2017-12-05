@@ -104,7 +104,7 @@ public class ThreeStonesClient {
      * Method that when called will send a packet to the server to tell that the
      * client no longer wishes to play and the session will close.
      */
-    private void endSession(ThreeStonesPacket endPacket) {
+    private void endSession(ThreeStonesPacket endPacket) throws IOException{
         endPacket.sendPacket(out);
         try {
             socket.close();
@@ -119,7 +119,7 @@ public class ThreeStonesClient {
      * Method that when called will play a single game of ThreeStones with the
      * server and will tally the victor.
      */
-    private void playGame() {
+    private void playGame() throws IOException{
         playerScore = 0;
         compScore = 0;
         stonesLeft = 15;
