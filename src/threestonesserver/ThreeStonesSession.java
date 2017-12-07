@@ -127,7 +127,7 @@ public class ThreeStonesSession implements Runnable {
         try {
             playSession();
         } catch (Exception ex) {
-            System.out.println("Exception: " + ex.getMessage());
+            System.out.println("The user has closed the connection");
         }
         System.out.println("Finished serving client");
     }
